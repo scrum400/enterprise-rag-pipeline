@@ -10,7 +10,7 @@ import java.util.UUID;
 @Component
 public class DocumentChunker {
 
-    private static final int CHUNK_SIZE = 10; //500;
+    private static final int CHUNK_SIZE = 500;
 
     public List<DocumentChunk> chunk(String content) {
 
