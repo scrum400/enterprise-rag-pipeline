@@ -2,6 +2,7 @@ package ca.kevin.enterprise_rag_pipeline.api;
 
 import ca.kevin.enterprise_rag_pipeline.application.document.DocumentService;
 import ca.kevin.enterprise_rag_pipeline.application.document.DocumentChunker;
+import ca.kevin.enterprise_rag_pipeline.domain.retrieval.EmbeddingProvider;
 import ca.kevin.enterprise_rag_pipeline.domain.document.Document;
 import ca.kevin.enterprise_rag_pipeline.domain.document.DocumentChunk;
 import org.springframework.web.bind.annotation.*;
@@ -11,15 +12,19 @@ import java.util.UUID;
 
 @RestController
 //@RequestMapping("/api/documents")
-//@RequestMapping("/api/documents")
+@RequestMapping("/api/documents")
 public class DocumentController {
 
     private final DocumentService documentService;
     private final DocumentChunker documentChunker;
+    private final EmbeddingProvider embeddingProvider;
 
-    public DocumentController(DocumentService documentService, DocumentChunker documentChunker) {
+    public DocumentController(DocumentService documentService,
+                              DocumentChunker documentChunker,
+                              EmbeddingProvider embeddingProvider) {
         this.documentService = documentService;
         this.documentChunker = documentChunker;
+        this.embeddingProvider = embeddingProvider;
     }
 
     @PostMapping
@@ -40,5 +45,9 @@ public class DocumentController {
     @GetMapping("/api/chunks")
     public List<DocumentChunk> chunks(@RequestParam String text) {
         return documentChunker.chunk(text);
+    }
+    @GetMapping("/embedding")
+    public List<Double> embedding(@RequestParam String text) {
+        return embeddingProvider.embed(text);
     }
 }
