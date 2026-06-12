@@ -41,7 +41,23 @@ public class PostgresVectorStore implements VectorStore {
             List<Double> queryEmbedding,
             int topK
     ) {
-        return Collections.emptyList();
+        System.out.println(
+                "Using PostgreSQL vector search"
+        );
+        String vectorLiteral =
+                toVectorLiteral(queryEmbedding);
+
+        return repository.findNearest(
+                        vectorLiteral,
+                        topK
+                )
+                .stream()
+                .map(entity ->
+                        new DocumentChunk(
+                                entity.getId(),
+                                entity.getContent()
+                        ))
+                .toList();
     }
 
     private float[] toFloatArray(List<Double> embedding) {
@@ -53,6 +69,20 @@ public class PostgresVectorStore implements VectorStore {
         }
 
         return result;
+    }
+    private String toVectorLiteral(
+            List<Double> embedding
+    ) {
+
+        return embedding.stream()
+                .map(String::valueOf)
+                .collect(
+                        java.util.stream.Collectors.joining(
+                                ",",
+                                "[",
+                                "]"
+                        )
+                );
     }
 
 }
