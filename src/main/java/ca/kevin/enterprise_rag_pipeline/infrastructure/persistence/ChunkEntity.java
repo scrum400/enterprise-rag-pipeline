@@ -4,6 +4,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Column;
+import org.hibernate.annotations.Array;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "document_chunks")
@@ -14,8 +17,10 @@ public class ChunkEntity {
 
     private String content;
 
-    @Column(columnDefinition = "TEXT")
-    private String embedding;
+    @JdbcTypeCode(SqlTypes.VECTOR)
+    @Column(columnDefinition = "vector(768)")
+    private float[] embedding;
+
 
     public ChunkEntity() {
     }
@@ -23,7 +28,7 @@ public class ChunkEntity {
     public ChunkEntity(
             String id,
             String content,
-            String embedding
+            float[] embedding
     ) {
         this.id = id;
         this.content = content;
@@ -38,7 +43,7 @@ public class ChunkEntity {
         return content;
     }
 
-    public String getEmbedding() {
+    public float[] getEmbedding() {
         return embedding;
     }
 
@@ -50,7 +55,7 @@ public class ChunkEntity {
         this.content = content;
     }
 
-    public void setEmbedding(String embedding) {
+    public void setEmbedding(float[] embedding) {
         this.embedding = embedding;
     }
 }

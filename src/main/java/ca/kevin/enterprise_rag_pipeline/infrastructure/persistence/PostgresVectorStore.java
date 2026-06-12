@@ -30,7 +30,7 @@ public class PostgresVectorStore implements VectorStore {
                 new ChunkEntity(
                         chunk.id(),
                         chunk.content(),
-                        embedding.toString()
+                        toFloatArray(embedding)
                 );
 
         repository.save(entity);
@@ -43,4 +43,16 @@ public class PostgresVectorStore implements VectorStore {
     ) {
         return Collections.emptyList();
     }
+
+    private float[] toFloatArray(List<Double> embedding) {
+
+        float[] result = new float[embedding.size()];
+
+        for (int i = 0; i < embedding.size(); i++) {
+            result[i] = embedding.get(i).floatValue();
+        }
+
+        return result;
+    }
+
 }

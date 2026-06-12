@@ -56,6 +56,13 @@ public class DocumentController {
         return embeddingProvider.embed(text);
     }
 
+    @GetMapping("/embedding-size")
+    public int embeddingSize(
+            @RequestParam String text
+    ) {
+        return embeddingProvider.embed(text).size();
+    }
+
     @GetMapping("/search")
     public List<DocumentChunk> search(
             @RequestParam String query
